@@ -102,8 +102,13 @@ GEM
   specs:
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    annotate (2.6.5)
+      activerecord (>= 2.3.0)
+      rake (>= 0.8.7)
     ast (2.4.3)
+    base32-crockford (0.1.0)
     base64 (0.2.0)
+    bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.1)
     benchmark (0.4.0)
     bigdecimal (3.1.9)
@@ -323,6 +328,15 @@ GEM
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.6)
+    tailwindcss-rails (4.2.2)
+      railties (>= 7.0.0)
+      tailwindcss-ruby (~> 4.0)
+    tailwindcss-ruby (4.1.3)
+    tailwindcss-ruby (4.1.3-aarch64-linux-gnu)
+    tailwindcss-ruby (4.1.3-aarch64-linux-musl)
+    tailwindcss-ruby (4.1.3-arm64-darwin)
+    tailwindcss-ruby (4.1.3-x86_64-linux-gnu)
+    tailwindcss-ruby (4.1.3-x86_64-linux-musl)
     thor (1.3.2)
     thruster (0.1.12)
     thruster (0.1.12-aarch64-linux)
@@ -334,6 +348,13 @@ GEM
       railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    ulid (1.4.0)
+    ulid-rails (2.1.0)
+      activemodel (>= 5.2)
+      activerecord (>= 5.2)
+      activesupport (>= 5.2)
+      base32-crockford (~> 0.1)
+      ulid (~> 1.0)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
@@ -365,6 +386,8 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  annotate
+  bcrypt (~> 3.1.7)
   bootsnap
   brakeman
   bundler-audit
@@ -383,9 +406,12 @@ DEPENDENCIES
   solid_cache
   solid_queue
   stimulus-rails
+  tailwindcss-rails (~> 4.2)
+  tailwindcss-ruby (~> 4.1)
   thruster
   turbo-rails
   tzinfo-data
+  ulid-rails
   web-console
 
 BUNDLED WITH

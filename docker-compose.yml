@@ -1,0 +1,18 @@
+---
+services:
+  db:
+    environment:
+      POSTGRES_USER: brewery
+      POSTGRES_DB: brewery_development
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_HOST_AUTH_METHOD: trust
+    image: postgres:17.4
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+networks:
+  default:
+    driver: bridge
+volumes:
+  pg_data: {}
