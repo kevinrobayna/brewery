@@ -27,6 +27,101 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: device_telemetries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.device_telemetries (
+    id text NOT NULL,
+    device_id text NOT NULL,
+    row_key text NOT NULL,
+    type text NOT NULL,
+    version text NOT NULL,
+    mac_address text NOT NULL,
+    metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
+-- Name: COLUMN device_telemetries.row_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_telemetries.row_key IS 'Unique key for the telemetry data from ratp.io';
+
+
+--
+-- Name: COLUMN device_telemetries.type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_telemetries.type IS 'Used for STI, this will be Brezilla, Hydrometer, etc';
+
+
+--
+-- Name: COLUMN device_telemetries.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_telemetries.version IS 'Version of the device';
+
+
+--
+-- Name: COLUMN device_telemetries.mac_address; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_telemetries.mac_address IS 'MAC address of the device';
+
+
+--
+-- Name: COLUMN device_telemetries.metadata; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_telemetries.metadata IS 'Holds specific information from the devices';
+
+
+--
+-- Name: devices; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.devices (
+    id text NOT NULL,
+    name text NOT NULL,
+    ratp_id uuid NOT NULL,
+    type text NOT NULL,
+    metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
+-- Name: COLUMN devices.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.devices.name IS 'Device Name shown in the UI';
+
+
+--
+-- Name: COLUMN devices.ratp_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.devices.ratp_id IS 'Primary key from the ratp.io API';
+
+
+--
+-- Name: COLUMN devices.type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.devices.type IS 'Used for STI, this will be Brezilla, Hydrometer, etc';
+
+
+--
+-- Name: COLUMN devices.metadata; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.devices.metadata IS 'Holds specific information from the devices';
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -40,10 +135,10 @@ CREATE TABLE public.schema_migrations (
 --
 
 CREATE TABLE public.sessions (
-    id bytea NOT NULL,
-    user_id bytea NOT NULL,
-    ip_address character varying,
-    user_agent character varying,
+    id text NOT NULL,
+    user_id text NOT NULL,
+    ip_address text,
+    user_agent text,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL
 );
@@ -54,9 +149,9 @@ CREATE TABLE public.sessions (
 --
 
 CREATE TABLE public.users (
-    id bytea NOT NULL,
-    email_address character varying NOT NULL,
-    password_digest character varying NOT NULL,
+    id text NOT NULL,
+    email_address text NOT NULL,
+    password_digest text NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL
 );
@@ -68,6 +163,22 @@ CREATE TABLE public.users (
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: device_telemetries device_telemetries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.device_telemetries
+    ADD CONSTRAINT device_telemetries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: devices devices_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.devices
+    ADD CONSTRAINT devices_pkey PRIMARY KEY (id);
 
 
 --
@@ -95,6 +206,48 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: index_device_telemetries_on_device_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_device_telemetries_on_device_id ON public.device_telemetries USING btree (device_id);
+
+
+--
+-- Name: index_devices_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_devices_on_name ON public.devices USING btree (name);
+
+
+--
+-- Name: INDEX index_devices_on_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.index_devices_on_name IS 'We don''t want to have devices with the same name';
+
+
+--
+-- Name: index_devices_on_ratp_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_devices_on_ratp_id ON public.devices USING btree (ratp_id);
+
+
+--
+-- Name: INDEX index_devices_on_ratp_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.index_devices_on_ratp_id IS 'This is a PK on the ratp.io API';
+
+
+--
+-- Name: index_devices_on_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_devices_on_type ON public.devices USING btree (type);
+
+
+--
 -- Name: index_sessions_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -106,6 +259,14 @@ CREATE INDEX index_sessions_on_user_id ON public.sessions USING btree (user_id);
 --
 
 CREATE UNIQUE INDEX index_users_on_email_address ON public.users USING btree (email_address);
+
+
+--
+-- Name: device_telemetries fk_rails_3e8ec8312d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.device_telemetries
+    ADD CONSTRAINT fk_rails_3e8ec8312d FOREIGN KEY (device_id) REFERENCES public.devices(id);
 
 
 --
@@ -123,6 +284,8 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250410191802'),
+('20250410165044'),
 ('20250409202533'),
 ('20250409202532');
 

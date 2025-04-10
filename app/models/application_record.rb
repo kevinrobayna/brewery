@@ -1,6 +1,5 @@
 class ApplicationRecord < ActiveRecord::Base
-  primary_abstract_class
+  include Ulid
 
-  include ULID::Rails
-  ulid :id, auto_generate: true # The first argument is the ULID column name
+  primary_abstract_class
 end

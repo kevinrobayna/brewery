@@ -17,7 +17,7 @@ module Brewery
     # Never use ruby for db structure
     config.active_record.schema_format = :sql
     config.generators do |g|
-      g.orm :active_record, primary_key_type: :binary, limit: 16
+      g.orm :active_record, primary_key_type: :text
     end
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do

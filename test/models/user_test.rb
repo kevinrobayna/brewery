@@ -2,9 +2,9 @@
 #
 # Table name: users
 #
-#  id              :binary           not null, primary key
-#  email_address   :string           not null
-#  password_digest :string           not null
+#  id              :text             not null, primary key
+#  email_address   :text             not null, indexed
+#  password_digest :text             not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #

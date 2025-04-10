@@ -1,8 +1,8 @@
 class CreateUsers < ActiveRecord::Migration[8.1]
   def change
-    create_table :users, id: :binary do |t|
-      t.string :email_address, null: false
-      t.string :password_digest, null: false
+    create_table :users, id: :text do |t|
+      t.text :email_address, null: false
+      t.text :password_digest, null: false
 
       t.timestamps
     end
