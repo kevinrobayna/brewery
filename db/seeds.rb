@@ -1,4 +1,4 @@
-require 'rapt_api_client'
+require "rapt_api_client"
 
 # This file should ensure the existence of records required to run the application in every environment (production,
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
@@ -11,24 +11,23 @@ require 'rapt_api_client'
 #   end
 
 User.create!(
-email_address: "test@brews.com",
-password_digest: BCrypt::Password.create("password")
+  email_address: "test@brews.com",
+  password_digest: BCrypt::Password.create("password")
 )
 
 start_date = 1.week.ago.to_date
-end_date = Date.today.to_date
+end_date = Time.zone.today.to_date
 
 begin
   api_instance = RaptApiClient::HydrometerApi.new
   hydrometers = api_instance.api_hydrometers_get_hydrometers_get
   hydrometers.each do |hydrometer_api|
-
-  hydrometer = Hydrometer.create!(
-    name: hydrometer_api.name,
-ratp_id: hydrometer_api.id,
-          created_at: hydrometer_api.created_on,
-  )
-    opts ={hydrometer_id: hydrometer.ratp_id,start_date:, end_date:}
+    hydrometer = Hydrometer.create!(
+      name: hydrometer_api.name,
+      ratp_id: hydrometer_api.id,
+      created_at: hydrometer_api.created_on
+    )
+    opts = {hydrometer_id: hydrometer.ratp_id, start_date:, end_date:}
     api_instance.api_hydrometers_get_telemetry_get(opts).each do |telemetry|
       HydrometerTelemetry.create!(
         device_id: hydrometer.id,
@@ -39,26 +38,25 @@ ratp_id: hydrometer_api.id,
         version: telemetry.version,
         row_key: telemetry.row_key,
         mac_address: telemetry.mac_address,
-          created_at: telemetry.created_on,
-        last_reading_time_sec: DateTime.now.to_i - telemetry.created_on.to_i,
+        created_at: telemetry.created_on,
+        last_reading_time_sec: DateTime.now.to_i - telemetry.created_on.to_i
       )
     end
   end
 rescue RaptApiClient::ApiError => e
-  puts "Failed to fetch hydrometers: #{e}"
+  Rails.logger.debug { "Failed to fetch hydrometers: #{e}" }
 end
 
 begin
   api_instance = RaptApiClient::BrewZillaApi.new
   brewzillas = api_instance.api_brew_zillas_get_brew_zillas_get
   brewzillas.each do |brewzilla_api|
-
-  brewzilla = Brewzilla.create!(
-    name: brewzilla_api.name,
-ratp_id: brewzilla_api.id,
-          created_at: brewzilla_api.created_on,
-  )
-    opts ={brew_zilla_id: brewzilla.ratp_id,start_date:, end_date:}
+    brewzilla = Brewzilla.create!(
+      name: brewzilla_api.name,
+      ratp_id: brewzilla_api.id,
+      created_at: brewzilla_api.created_on
+    )
+    opts = {brew_zilla_id: brewzilla.ratp_id, start_date:, end_date:}
     api_instance.api_brew_zillas_get_telemetry_get(opts).each do |telemetry|
       BrewzillaTelemetry.create!(
         device_id: brewzilla.id,
@@ -69,10 +67,10 @@ ratp_id: brewzilla_api.id,
         version: brewzilla_api.firmware_version,
         row_key: telemetry.row_key,
         mac_address: telemetry.mac_address,
-        created_at: telemetry.created_on,
+        created_at: telemetry.created_on
       )
     end
   end
 rescue RaptApiClient::ApiError => e
-  puts "Failed to fetch brewzillas: #{e}"
+  Rails.logger.debug { "Failed to fetch brewzillas: #{e}" }
 end

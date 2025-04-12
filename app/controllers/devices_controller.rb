@@ -1,5 +1,5 @@
 class DevicesController < ApplicationController
-  before_action :set_device, only: %i[ show edit update destroy ]
+  before_action :set_device, only: %i[show edit update destroy]
 
   # GET /devices or /devices.json
   def index
@@ -58,13 +58,14 @@ class DevicesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_device
-      @device = Device.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def device_params
-      params.expect(device: [ :name, :ratp_id, :connection_state, :mac_address, :type ])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_device
+    @device = Device.find(params.expect(:id))
+  end
+
+  # Only allow a list of trusted parameters through.
+  def device_params
+    params.expect(device: [:name, :ratp_id, :connection_state, :mac_address, :type])
+  end
 end

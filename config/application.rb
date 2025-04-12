@@ -35,9 +35,8 @@ module Brewery
     # config.eager_load_paths << Rails.root.join("extras")
 
     ActiveSupport.on_load(:active_record_postgresqladapter) do
-     self.datetime_type = :timestamptz
+      self.datetime_type = :timestamptz
     end
-
 
     config.active_record.strict_loading_by_default = true
 

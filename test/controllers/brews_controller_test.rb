@@ -17,7 +17,7 @@ class BrewsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create brew" do
     assert_difference("Brew.count") do
-      post brews_url, params: { brew: { name: @brew.name, state: @brew.state } }
+      post brews_url, params: {brew: {name: @brew.name, state: @brew.state}}
     end
 
     assert_redirected_to brew_url(Brew.last)
@@ -34,7 +34,7 @@ class BrewsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update brew" do
-    patch brew_url(@brew), params: { brew: { name: @brew.name, state: @brew.state } }
+    patch brew_url(@brew), params: {brew: {name: @brew.name, state: @brew.state}}
     assert_redirected_to brew_url(@brew)
   end
 

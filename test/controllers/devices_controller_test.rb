@@ -17,7 +17,7 @@ class DevicesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create device" do
     assert_difference("Device.count") do
-      post devices_url, params: { device: { connection_state: @device.connection_state, mac_address: @device.mac_address, name: @device.name, ratp_id: @device.ratp_id, type: @device.type } }
+      post devices_url, params: {device: {connection_state: @device.connection_state, mac_address: @device.mac_address, name: @device.name, ratp_id: @device.ratp_id, type: @device.type}}
     end
 
     assert_redirected_to device_url(Device.last)
@@ -34,7 +34,7 @@ class DevicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update device" do
-    patch device_url(@device), params: { device: { connection_state: @device.connection_state, mac_address: @device.mac_address, name: @device.name, ratp_id: @device.ratp_id, type: @device.type } }
+    patch device_url(@device), params: {device: {connection_state: @device.connection_state, mac_address: @device.mac_address, name: @device.name, ratp_id: @device.ratp_id, type: @device.type}}
     assert_redirected_to device_url(@device)
   end
 

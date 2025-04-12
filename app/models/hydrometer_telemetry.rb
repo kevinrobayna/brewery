@@ -1,4 +1,4 @@
-class HydrometerTelemetry < DeviceTelemetry  
+class HydrometerTelemetry < DeviceTelemetry
   include AttrJson::Record
   attr_json_config(default_container_attribute: :metadata)
 
