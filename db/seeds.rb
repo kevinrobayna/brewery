@@ -12,4 +12,3 @@ User.create!(
 email_address: "test@brews.com",
 password_digest: BCrypt::Password.create("password")
 )
-

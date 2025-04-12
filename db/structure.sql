@@ -27,6 +27,19 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: brews; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.brews (
+    id text NOT NULL,
+    name text,
+    state text,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
 -- Name: device_telemetries; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -166,6 +179,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
+-- Name: brews brews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.brews
+    ADD CONSTRAINT brews_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: device_telemetries device_telemetries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -284,6 +305,7 @@ ALTER TABLE ONLY public.sessions
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250410192756'),
 ('20250410191802'),
 ('20250410165044'),
 ('20250409202533'),

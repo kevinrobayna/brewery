@@ -54,6 +54,7 @@
 #                     rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                                    active_storage/direct_uploads#create
 
 Rails.application.routes.draw do
+  resources :brews
   resources :devices
   resource :session
   resources :passwords, param: :token
@@ -69,4 +70,5 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  root "brews#index"
 end
