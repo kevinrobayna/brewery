@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/kevinrobayna/ratp.io.git
+  revision: bf8bdb45cb8b2ac41df0b8410b09bfd097e701b3
+  branch: main
+  specs:
+    rapt_api_client (1.0.0)
+      typhoeus (~> 1.0, >= 1.0.1)
+
+GIT
   remote: https://github.com/rails/rails.git
   revision: fb0e36c7cc873911462f6fad675842b87fb948a8
   branch: main
@@ -96,12 +104,6 @@ GIT
       rake (>= 12.2)
       thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
-
-PATH
-  remote: ../ratp.io
-  specs:
-    rapt_api_client (1.0.0)
-      typhoeus (~> 1.0, >= 1.0.1)
 
 GEM
   remote: https://rubygems.org/

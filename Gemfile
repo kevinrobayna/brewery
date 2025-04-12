@@ -47,8 +47,7 @@ gem "base32-crockford", "~> 0.1"
 gem "tailwindcss-ruby", "~> 4.1"
 gem "tailwindcss-rails", "~> 4.2"
 
-# gem "rapt_api_client", github: "kevinrobayna/ratp.io", branch: "main"
-gem "rapt_api_client", path: "~/dev/ratp.io/"
+gem "rapt_api_client", github: "kevinrobayna/ratp.io", branch: "main"
 
 gem "attr_json"
 
