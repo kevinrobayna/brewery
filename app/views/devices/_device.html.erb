@@ -19,15 +19,14 @@
       <% end %>
       <% case device.type %>
       <% when "Hydrometer" %>
+        <% groupped_telemetry = device.groupped_telemetry %>
         <% temperature_data =
-          device.groupped_telemetry.map do |time, metadata|
+          groupped_telemetry.map do |time, metadata|
             [time, metadata["temperature"].round(1)]
           end %>
 
         <% battery_data =
-          device.groupped_telemetry.map do |time, metadata|
-            [time, metadata["battery"].floor]
-          end %>
+          groupped_telemetry.map { |time, metadata| [time, metadata["battery"].floor] } %>
 
         <%= line_chart [
           { name: "Temperature (°C)", data: temperature_data, yAxisID: "yTemp" },
@@ -70,6 +69,37 @@
         } %>
 
       <% when "Brewzilla" %>
+        <% groupped_telemetry = device.groupped_telemetry(group_by: :minute) %>
+        <% temperature_data =
+          groupped_telemetry.map do |time, metadata|
+            [time, metadata["temperature"].round(1)]
+          end %>
+
+        <%= line_chart [
+          { name: "Temperature (°C)", data: temperature_data, yAxisID: "yTemp" },
+        ],
+        xtitle: "Time",
+        library: {
+          options: {
+            responsive: true,
+            interaction: {
+              mode: "index",
+              intersect: false,
+            },
+            scales: {
+              yTemp: {
+                type: "linear",
+                position: "left",
+                min: 0,
+                max: 40,
+                title: {
+                  display: true,
+                  text: "Temperature (°C)",
+                },
+              },
+            },
+          },
+        } %>
       <% else %>
       <% end %>
     </div>
