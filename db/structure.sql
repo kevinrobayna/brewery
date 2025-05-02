@@ -32,11 +32,33 @@ CREATE TABLE public.ar_internal_metadata (
 
 CREATE TABLE public.brews (
     id text NOT NULL,
-    name text,
-    state text,
+    name text NOT NULL,
+    state text NOT NULL,
+    metadata jsonb DEFAULT '{}'::jsonb,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL
 );
+
+
+--
+-- Name: COLUMN brews.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.brews.name IS 'Name of the beer';
+
+
+--
+-- Name: COLUMN brews.state; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.brews.state IS 'State of the brew process, scheduled, brewing, ageing, etc';
+
+
+--
+-- Name: COLUMN brews.metadata; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.brews.metadata IS 'Holds specific information from the brewing process';
 
 
 --
@@ -50,6 +72,7 @@ CREATE TABLE public.device_telemetries (
     type text NOT NULL,
     version text NOT NULL,
     mac_address text NOT NULL,
+    reading_at timestamp(6) with time zone NOT NULL,
     metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL
@@ -82,6 +105,13 @@ COMMENT ON COLUMN public.device_telemetries.version IS 'Version of the device';
 --
 
 COMMENT ON COLUMN public.device_telemetries.mac_address IS 'MAC address of the device';
+
+
+--
+-- Name: COLUMN device_telemetries.reading_at; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_telemetries.reading_at IS 'Date and time (UTC) of the readong according to the source';
 
 
 --
@@ -231,6 +261,20 @@ ALTER TABLE ONLY public.users
 --
 
 CREATE INDEX index_device_telemetries_on_device_id ON public.device_telemetries USING btree (device_id);
+
+
+--
+-- Name: index_device_telemetries_on_reading_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_device_telemetries_on_reading_at ON public.device_telemetries USING btree (reading_at);
+
+
+--
+-- Name: INDEX index_device_telemetries_on_reading_at; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.index_device_telemetries_on_reading_at IS 'Our graphs are all based on the reading time';
 
 
 --

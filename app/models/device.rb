@@ -22,5 +22,34 @@ class Device < ApplicationRecord
 
   has_many :device_telemetries, dependent: :destroy
 
+  def last_reading_time
+    device_telemetries.last.reading_at
+  end
+
+  def groupped_telemetry(period: 1.month, group_by: :day)
+    last_reading = (last_reading_time || Time.current).beginning_of_day
+    device_telemetries
+      .where("reading_at >= ?", (last_reading - period).beginning_of_day)
+      .where("reading_at <= ?", last_reading.end_of_day)
+      .group(
+        Arel.sql("DATE_TRUNC('#{group_by}', reading_at)")
+      )
+      .pluck(
+        Arel.sql("DATE_TRUNC('#{group_by}', reading_at)"),
+        Arel.sql("array_agg(metadata)")
+      ).map do |date, readings|
+        is_beginning_of_day = date == date.beginning_of_day
+        example = readings.first
+        keys = example.keys.filter_map { it if example[it].is_a?(Numeric) }
+
+        sums = readings.each_with_object(Hash.new(0)) do |reading, acc|
+          keys.each { |key| acc[key] += reading[key] }
+        end
+
+        averages = sums.transform_values { |sum| (sum / readings.size.to_f).round(5) }
+        [is_beginning_of_day ? date.to_date.to_s : date, averages]
+      end
+  end
+
   normalizes :name, with: ->(e) { e.strip.capitalize }
 end

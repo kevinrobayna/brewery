@@ -1,7 +1,8 @@
 AllCops:
   NewCops: disable
   SuggestExtensions: false
-  TargetRailsVersion: 3.4
+  TargetRubyVersion: 3.4
+  TargetRailsVersion: 8.0
 plugins:
   - standard-custom
   - standard-performance

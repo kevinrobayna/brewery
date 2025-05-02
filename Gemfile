@@ -45,12 +45,18 @@ gem "base32-crockford", "~> 0.1"
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+# Websites with style :D
 gem "tailwindcss-ruby", "~> 4.1"
 gem "tailwindcss-rails", "~> 4.2"
 
+# Automatically generated client from RATP API
 gem "rapt_api_client", github: "kevinrobayna/ratp.io", branch: "main"
 
+# Easily handle json columns in PostgreSQL
 gem "attr_json"
+
+# Draw graph and charts with ease (charts.js)
+gem "chartkick"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -62,6 +68,7 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
+  # Rubocop extensions
   gem "standard"
   gem "standard-rails"
   gem "standard-performance"

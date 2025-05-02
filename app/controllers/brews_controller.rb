@@ -1,8 +1,10 @@
 class BrewsController < ApplicationController
+  allow_unauthenticated_access only: %i[index]
   before_action :set_brew, only: %i[show edit update destroy]
 
   # GET /brews or /brews.json
   def index
+    @devices = Device.all
     @brews = Brew.all
   end
 

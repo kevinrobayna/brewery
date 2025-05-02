@@ -6,9 +6,12 @@ class CreateDeviceTelemetries < ActiveRecord::Migration[8.1]
       t.text :type, null: false, comment: "Used for STI, this will be Brezilla, Hydrometer, etc"
       t.text :version, null: false, comment: "Version of the device"
       t.text :mac_address, null: false, comment: "MAC address of the device"
+      t.datetime :reading_at, null: false, comment: "Date and time (UTC) of the readong according to the source"
       t.jsonb :metadata, null: false, default: {}, comment: "Holds specific information from the devices"
 
       t.timestamps
     end
+
+    add_index :device_telemetries, :reading_at, comment: "Our graphs are all based on the reading time"
   end
 end

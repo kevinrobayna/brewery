@@ -2,26 +2,32 @@
 #
 # Table name: device_telemetries
 #
-#  id                                                         :text             not null, primary key
-#  mac_address(MAC address of the device)                     :text             not null
-#  metadata(Holds specific information from the devices)      :jsonb            not null
-#  row_key(Unique key for the telemetry data from ratp.io)    :text             not null
-#  type(Used for STI, this will be Brezilla, Hydrometer, etc) :text             not null
-#  version(Version of the device)                             :text             not null
-#  created_at                                                 :datetime         not null
-#  updated_at                                                 :datetime         not null
-#  device_id                                                  :text             not null, indexed
+#  id                                                                     :text             not null, primary key
+#  mac_address(MAC address of the device)                                 :text             not null
+#  metadata(Holds specific information from the devices)                  :jsonb            not null
+#  reading_at(Date and time (UTC) of the readong according to the source) :datetime         not null, indexed
+#  row_key(Unique key for the telemetry data from ratp.io)                :text             not null
+#  type(Used for STI, this will be Brezilla, Hydrometer, etc)             :text             not null
+#  version(Version of the device)                                         :text             not null
+#  created_at                                                             :datetime         not null
+#  updated_at                                                             :datetime         not null
+#  device_id                                                              :text             not null, indexed
 #
 # Indexes
 #
-#  index_device_telemetries_on_device_id  (device_id)
+#  index_device_telemetries_on_device_id   (device_id)
+#  index_device_telemetries_on_reading_at  (reading_at)
 #
 # Foreign Keys
 #
 #  fk_rails_3e8ec8312d  (device_id => devices.id)
 #
 class DeviceTelemetry < ApplicationRecord
+  include AttrJson::Record
+
   ulid :telemetry
+
+  attr_json_config(default_container_attribute: :metadata)
 
   belongs_to :device
 end

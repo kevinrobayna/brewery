@@ -15,8 +15,8 @@ User.create!(
   password_digest: BCrypt::Password.create("password")
 )
 
-start_date = 1.week.ago.to_date
-end_date = Time.zone.today.to_date
+start_date = 1.month.ago.to_date
+end_date = Time.zone.tomorrow.to_date
 
 begin
   api_instance = RaptApiClient::HydrometerApi.new
@@ -33,13 +33,11 @@ begin
         device_id: hydrometer.id,
         temperature: telemetry.temperature,
         gravity: telemetry.gravity,
-        gravity_velocity: telemetry.gravity_velocity,
         battery: telemetry.battery,
         version: telemetry.version,
         row_key: telemetry.row_key,
         mac_address: telemetry.mac_address,
-        created_at: telemetry.created_on,
-        last_reading_time_sec: DateTime.now.to_i - telemetry.created_on.to_i
+        reading_at: telemetry.created_on
       )
     end
   end
@@ -63,7 +61,7 @@ begin
         temperature: telemetry.temperature,
         target_temperature: telemetry.target_temperature,
         connection_state: brewzilla_api.connection_state,
-        last_reading_time_sec: DateTime.now.to_i - telemetry.created_on.to_i,
+        reading_at: telemetry.created_on,
         version: brewzilla_api.firmware_version,
         row_key: telemetry.row_key,
         mac_address: telemetry.mac_address,
